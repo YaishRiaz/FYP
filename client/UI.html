@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxing Video Analysis</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+        }
+
+        h1,
+        h3,
+        h5 {
+            color: #f1f1f1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            padding-top: 20px;
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
+
+        .btn-primary:hover {
+            background-color: #db4b1a;
+            border-color: #db4b1a;
+        }
+
+        .form-control,
+        .form-control-file {
+            background-color: #444;
+            color: #f1f1f1;
+            border-color: #888;
+        }
+
+        .form-control:focus {
+            border-color: #f96332;
+            box-shadow: 0 0 0 0.2rem rgba(249, 99, 50, 0.25);
+        }
+
+        .result {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        video {
+            border: 2px solid #f96332;
+            border-radius: 5px;
+        }
+
+        .player-card {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .player-stats {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-stats li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script type="text/babel">
+        class App extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    inputType: "",
+                    cameraSource: 0,
+                    videoFile: null,
+                    videoURL: null,
+                    playerStats: {
+                        player1: {
+                            punchesThrown: 0,
+                            fouls: 0,
+                            jabs: 0,
+                            hooks: 0,
+                            uppercuts: 0,
+                            points: 0
+                        },
+                        player2: {
+                            punchesThrown: 0,
+                            fouls: 0,
+                            jabs: 0,
+                            hooks: 0,
+                            uppercuts: 0,
+                            points: 0
+                        }
+                    }
+                };
+                this.videoRef = React.createRef();
+            }
+
+            handleInputTypeChange = (event) => {
+this.setState({ inputType: event.target.value });
+};
+handleCameraSourceChange = (event) => {
+            this.setState({ cameraSource: parseInt(event.target.value, 10) });
+        };
+
+        handleVideoFileChange = (event) => {
+            this.setState({ videoFile: event.target.files[0], videoURL: URL.createObjectURL(event.target.files[0]) });
+        };
+
+        handleSubmit = (event) => {
+            event.preventDefault();
+            // Analyze the video and update the result div and player stats
+        };
+
+        componentDidUpdate(_, prevState) {
+            if (prevState.inputType !== this.state.inputType && this.state.inputType === "live") {
+                navigator.mediaDevices
+                    .getUserMedia({ video: { deviceId: { exact: this.state.cameraSource } } })
+                    .then((stream) => {
+                        this.videoRef.current.srcObject = stream;
+                    })
+                    .catch((err) => {
+                        console.error("Error accessing camera:", err);
+                    });
+            }
+        }
+
+        render() {
+            const { inputType, cameraSource, videoFile, videoURL, playerStats } = this.state;
+            return (
+                <div className="container">
+                    <h1>Boxing Video Analysis</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label>
+                                Choose input type:
+                                <select
+                                    value={inputType}
+                                    onChange={this.handleInputTypeChange}
+                                    className="form-control"
+                                >
+                                    <option value="">Select input type</option>
+                                    <option value="live">Live feed</option>
+                                    <option value="video">Pre-recorded video</option>
+                                </select>
+                            </label>
+                        </div>
+                        {inputType === "live" && (
+                            <div className="form-group">
+                                <label>
+                                    Enter camera source:
+                                    <input
+                                        type="number"
+                                        value={cameraSource}
+                                        onChange={this.handleCameraSourceChange}
+                                        className="form-control"
+                                        min="0"
+                                        step="1"
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {inputType === "video" && (
+                            <div className="form-group">
+                                <label>
+                                    Choose a video file:
+                                    <input
+                                        type="file"
+                                        onChange={this.handleVideoFileChange}
+                                        className="form-control-file"
+                                        accept="video/*"
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        <button type="submit" className="btn btn-primary">
+                            Analyze
+                        </button>
+                    </form>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <h3>Video Preview</h3>
+                            <video ref={this.videoRef} src={videoURL} autoPlay muted controls loop style={{ width: "100%" }}></video>
+                        </div>
+                        <div className="col-md-6">
+                            <h3>Dashboard</h3>
+                            <div className="d-flex justify-content-between">
+                                {['player1', 'player2'].map((player) => (
+                                    <div key={player} className="player-card">
+                                        <h5>{player === 'player1' ? 'Player 1' : 'Player 2'}</h5>
+                                        <ul className="player-stats">
+                                            <li><span>Punches Thrown:</span> <span>{playerStats[player].punchesThrown}</span></li>
+                                            <li><span>Fouls:</span> <span>{playerStats[player].fouls}</span></li>
+                                            <li><span>Jabs:</span> <span>{playerStats[player].jabs
+                                            }</span></li>
+<li><span>Hooks:</span> <span>{playerStats[player].hooks}</span></li>
+<li><span>Uppercuts:</span> <span>{playerStats[player].uppercuts}</span></li>
+<li><span>Points:</span> <span>{playerStats[player].points}</span></li>
+</ul>
+</div>
+))}
+</div>
+</div>
+</div>
+<div className="result">
+{/* Display the result here */}
+</div>
+</div>
+);
+}
+}
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+</body>
+
+</html>
