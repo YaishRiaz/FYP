@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Video Analysis</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+        }
+
+        h1 {
+            color: #f96332;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"],
+        input[type="submit"] {
+            margin: 10px;
+            background-color: #444;
+            color: #f1f1f1;
+            border-color: #888;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
+
+        video {
+            border: 2px solid #f96332;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Video Foul Analysis</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="analyze-form" enctype="multipart/form-data">
+                    <input type="file" name="file" id="videoFile" accept="video/mp4">
+                    <input type="submit" value="Analyze">
+                    <div class="result" id="result" style="display: none;"></div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <video id="videoPreview" width="100%" height="auto" muted controls></video>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('videoFile').addEventListener('change', function () {
+            const videoPreview = document.getElementById('videoPreview');
+            const resultDiv = document.getElementById('result');
+            videoPreview.src = URL.createObjectURL(this.files[0]);
+            videoPreview.load();
+            resultDiv.style.display = 'none';
+        });
+
+        document.getElementById('analyze-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const videoFileInput = document.getElementById('videoFile');
+            if (!videoFileInput.files.length) {
+                alert('Please select a video file');
+                return;
+            }
+
+            const formData = new FormData(event.target);
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const resultDiv = document.getElementById('result');
+            if (response.ok) {
+                const data = await response.text();
+                const isFoul = data.includes("Foul");
+                const resultColor = isFoul ? 'red' : 'green';
+                resultDiv.innerHTML = `<span style="color: ${resultColor};">${data}</span>`;
+            } else {
+                resultDiv.innerHTML = `Error: ${response.statusText}`;
+            }
+            resultDiv.style.display = 'block';
+        });
+    </script>
+</body>
+
