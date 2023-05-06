@@ -41,6 +41,13 @@
             margin-bottom: 20px;
         }
 
+        .button-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
         .result {
             font-size: 1.2rem;
             font-weight: bold;
@@ -48,22 +55,58 @@
             margin-top: 10px;
             margin-left: 10px;
         }
+
+        .styled-button {
+            display: inline-block;
+            margin: 10px;
+            background-color: #444;
+            color: #f1f1f1;
+            border-color: #888;
+            padding: 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .styled-button:hover {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
+
+
+        #checkStats {
+            display: none;
+            margin: 10px;
+            background-color: #444;
+            color: #f1f1f1;
+            border-color: #888;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        #checkStats:hover {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
     </style>
+
 </head>
 
 <body>
     <div class="container">
-        <h1 class="text-center">Video Foul Analysis</h1>
+        <h1 class="text-center">AI-Ref Foul Recognition</h1>
         <div class="row">
+            <div class="col-md-6">
+                <video id="videoPreview" width="100%" height="auto" muted controls></video>
+            </div>
             <div class="col-md-6">
                 <form id="analyze-form" enctype="multipart/form-data">
                     <input type="file" name="file" id="videoFile" accept="video/mp4">
-                    <input type="submit" value="Analyze">
                     <div class="result" id="result" style="display: none;"></div>
+                    <div class="button-container">
+                        <button type="submit" class="styled-button">Analyze</button>
+                        <a href="{{ url_for('dashboard') }}" id="checkStats">Check Stats</a>
+                    </div>
                 </form>
-            </div>
-            <div class="col-md-6">
-                <video id="videoPreview" width="100%" height="auto" muted controls></video>
             </div>
         </div>
     </div>
@@ -75,10 +118,8 @@
             videoPreview.load();
             resultDiv.style.display = 'none';
         });
-
         document.getElementById('analyze-form').addEventListener('submit', async function (event) {
             event.preventDefault();
-
             const videoFileInput = document.getElementById('videoFile');
             if (!videoFileInput.files.length) {
                 alert('Please select a video file');
@@ -92,16 +133,26 @@
             });
 
             const resultDiv = document.getElementById('result');
-            if (response.ok) {
+            const checkStatsBtn = document.getElementById('checkStats');
+            if(response.ok) {
                 const data = await response.text();
-                const isFoul = data.includes("Foul");
-                const resultColor = isFoul ? 'red' : 'green';
-                resultDiv.innerHTML = `<span style="color: ${resultColor};">${data}</span>`;
+                const isFoul = data.includes("No Foul"); // Switch the condition here
+                const resultText = isFoul ? "The video is not a foul." : "The video is a Foul.";
+                const resultColor = isFoul ? 'green' : 'red';
+                resultDiv.innerHTML = `<span style="color: ${resultColor};">${resultText}</span>`;
+                localStorage.setItem('foulDetected', !isFoul); // Store the opposite of isFoul
+                localStorage.setItem('foulType', isFoul ? 'No Foul' : 'Low Blow');
+                checkStatsBtn.style.display = 'inline-block';
             } else {
                 resultDiv.innerHTML = `Error: ${response.statusText}`;
+                checkStatsBtn.style.display = 'none';
             }
             resultDiv.style.display = 'block';
         });
+
     </script>
+
+
 </body>
 
+</html>

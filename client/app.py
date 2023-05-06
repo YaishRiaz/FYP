@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import numpy as np
 import cv2
@@ -45,7 +45,10 @@ def analyze_video(video_path):
     input_data = np.expand_dims(stacked_frames, axis=0)
 
     prediction = model.predict(input_data)
-    return 'Foul' if prediction >= 0.5 else 'No Foul'
+    result = 'Foul' if prediction[0][0] < 0.5 else 'No Foul'  
+    foul_type = 'Low Blow' if result == 'Foul' else 'No Foul'
+
+    return {'result': result, 'foul_type': foul_type}
 
 # Load the model
 model = tf.keras.models.load_model(r'C:\Users\Yaish\Downloads\New Model\punch_classifier_model.h5')
@@ -65,9 +68,13 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
             result = analyze_video(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return f"The video is a {result}."
+            return jsonify(result)
 
     return render_template('index.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

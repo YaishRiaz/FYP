@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Stats Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+        }
+
+        h1 {
+            color: #f96332;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Stats Dashboard</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="stats">
+                    <p>Foul detected: <span id="foulDetected">No data available</span></p>
+                    <p>Foul type: <span id="foulType">No data available</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const foulDetected = localStorage.getItem('foulDetected');
+            const foulStatus = foulDetected === 'true' ? 'Yes' : 'No'; // Keep the status reversed here
+            document.getElementById('foulDetected').textContent = foulStatus;
+
+            const foulType = localStorage.getItem('foulType');
+            document.getElementById('foulType').textContent = foulType || 'No data available'; // No need to reverse the displayed foul type here
+        });
+    </script>
+</body>
+
+</html>
