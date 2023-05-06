@@ -75,3 +75,6 @@ The main Flask application file, app.py, is located in the same level as the tem
 - **Google drive (Dataset)** - https://drive.google.com/drive/folders/1kjMKhYegBG4J_p_sKeimlx_pZABXA1oa?usp=share_link - Contains the dataset of foul, non foul punches as well as test data to test the punches
 - **Google drive (Thesis)** - https://drive.google.com/drive/folders/16ypct-mWBgXKW83J45xBg_0E9k_54baE?usp=share_link - Contains the thesis
 - **Youtube (Demo)** - https://youtu.be/gcKHSCb46Bs - Contains the basic demo of the project
+
+## Code Quality
+[![CodeFactor](https://www.codefactor.io/repository/github/yaishriaz/fyp/badge)](https://www.codefactor.io/repository/github/yaishriaz/fyp)
