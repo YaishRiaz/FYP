@@ -2,6 +2,8 @@
 AI-Ref Foul Recognition is an application that allows users to analyze video clips and detect fouls in a sports context. This project contains both server-side (backend) and client-side (frontend) code. In this document, you'll find instructions and step-by-step guides on how to run both the frontend and backend.
 
 ## Folder Structure
+
+```
 FYP/
 │
 ├── README.md
@@ -21,7 +23,7 @@ FYP/
 └── server/
     ├── punch_classifier_model.h5
     └── PunchClassifierSystem.ipynb
-
+```
 
 ## Prerequisites
 Before running the application, make sure you have the following software installed on your system:
