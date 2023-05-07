@@ -20,9 +20,12 @@ FYP/
 │   │
 │   └── uploads/
 │
-└── server/
-    ├── punch_classifier_model.h5
-    └── PunchClassifierSystem.ipynb
+├── server/
+│   ├── punch_classifier_model.h5
+│   └── PunchClassifierSystem.ipynb
+│
+└── data/
+    └── trim_video.py
 ```
 
 ## Prerequisites
@@ -33,6 +36,7 @@ Before running the application, make sure you have the following software instal
 - TensorFlow
 - Numpy
 - OpenCV
+- MoviePy (if making your own data)
 
 ## Backend Setup
 
