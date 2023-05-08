@@ -23,17 +23,89 @@
             margin-top: 10px;
             margin-left: 10px;
         }
+
+        .light-theme {
+            background-color: #f1f1f1;
+            color: #1e1e1e;
+        }
+
+        .light-theme h1 {
+            color: #1e1e1e;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .light-theme input[type="file"],
+        .light-theme input[type="submit"],
+        .light-theme .styled-button {
+            background-color: #f1f1f1;
+            color: #1e1e1e;
+            border-color: #888;
+        }
+
+        .light-theme input[type="submit"]:hover,
+        .light-theme .styled-button:hover {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
+
+        .light-theme video {
+            border: 2px solid #f96332;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .stats-box {
+            background-color: rgba(70, 70, 70, 0.9);
+            border: 2px solid #f96332;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .light-theme .stats-box {
+            background-color: rgba(245, 245, 245, 0.9);
+            border: 2px solid #1e1e1e;
+
+        }
+
+        .styled-button {
+            display: inline-block;
+            margin: 10px;
+            background-color: #444;
+            color: #f1f1f1;
+            border-color: #888;
+            padding: 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .styled-button:hover {
+            background-color: #f96332;
+            border-color: #f96332;
+        }
+
+        .light-theme .stats-box {
+            border-color: #1e1e1e;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="themeSwitch">
+            <label class="custom-control-label" for="themeSwitch">Toggle Light/Dark Theme</label>
+        </div>
         <h1 class="text-center">Stats Dashboard</h1>
         <div class="row">
             <div class="col-md-12">
-                <div class="stats">
-                    <p>Foul detected: <span id="foulDetected">No data available</span></p>
-                    <p>Foul type: <span id="foulType">No data available</span></p>
+                <button onclick="goBack()" class="styled-button">Back</button>
+            </div>
+            <div class="col-md-12">
+                <div class="stats-box">
+                    <div class="stats">
+                        <p>Foul detected: <span id="foulDetected">No data available</span></p>
+                        <p>Foul type: <span id="foulType">No data available</span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,12 +114,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const foulDetected = localStorage.getItem('foulDetected');
-            const foulStatus = foulDetected === 'true' ? 'Yes' : 'No'; // Keep the status reversed here
+            const foulStatus = foulDetected === 'true' ? 'Yes' : 'No';
             document.getElementById('foulDetected').textContent = foulStatus;
 
             const foulType = localStorage.getItem('foulType');
-            document.getElementById('foulType').textContent = foulType || 'No data available'; // No need to reverse the displayed foul type here
+            document.getElementById('foulType').textContent = foulType || 'No data available';
         });
+
+        function toggleTheme() {
+            const body = document.querySelector('body');
+            body.classList.toggle('light-theme');
+        }
+
+        document.getElementById('themeSwitch').addEventListener('change', toggleTheme);
+
+        function goBack() {
+            window.history.back();
+        }
     </script>
 </body>
 
