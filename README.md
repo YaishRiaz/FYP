@@ -75,10 +75,10 @@ The frontend files are located in the templates folder:
 The main Flask application file, app.py, is located in the same level as the templates folder. The backend code handles video uploads, video analysis, and result generation. The application uses a pre-trained TensorFlow model to analyze the uploaded videos and detect fouls.
 
 ## Extra links
-<!-- - **Google drive (Codes)** - https://drive.google.com/drive/folders/1OXDXDuMW1YsbwgvTlavdVp2os__c2h-z?usp=share_link - Contains the codes -->
-- **Google drive (Dataset)** - https://drive.google.com/drive/folders/1kjMKhYegBG4J_p_sKeimlx_pZABXA1oa?usp=share_link - Contains the dataset of foul, non foul punches as well as test data to test the punches
-<!-- - **Google drive (Thesis)** - https://drive.google.com/drive/folders/16ypct-mWBgXKW83J45xBg_0E9k_54baE?usp=share_link - Contains the thesis -->
-- **Youtube (Demo)** - https://youtu.be/gcKHSCb46Bs - Contains the basic demo of the project
+<!-- - **Google drive (Codes)** - (after the viva I will add this) - Contains the codes -->
+- **Google drive (Dataset)** - https://drive.google.com/drive/folders/1kjMKhYegBG4J_p_sKeimlx_pZABXA1oa?usp=sharing - Contains the dataset of foul, non foul punches as well as test data to test the punches
+<!-- - **Google drive (Thesis)** - (after the viva I will add this) - Contains the thesis -->
+- **Youtube (Demo)** - https://youtu.be/gcKHSCb46Bs - Contains the basic demo of the project prototype
 
 ## Code Quality
 [![CodeFactor](https://www.codefactor.io/repository/github/yaishriaz/fyp/badge)](https://www.codefactor.io/repository/github/yaishriaz/fyp)
