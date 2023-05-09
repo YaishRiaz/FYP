@@ -113,12 +113,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const foulDetected = localStorage.getItem('foulDetected');
-            const foulStatus = foulDetected === 'true' ? 'Yes' : 'No';
-            document.getElementById('foulDetected').textContent = foulStatus;
-
-            const foulType = localStorage.getItem('foulType');
-            document.getElementById('foulType').textContent = foulType || 'No data available';
+            const videoAnalysisData = JSON.parse(sessionStorage.getItem('videoAnalysisData'));
+            if (videoAnalysisData) {
+                const { foulDetected, foulType } = videoAnalysisData;
+                document.getElementById('foulDetected').innerText = foulDetected ? 'Yes' : 'No';
+                document.getElementById('foulType').innerText = foulType;
+            }
         });
 
         function toggleTheme() {

@@ -68,7 +68,12 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
             result = analyze_video(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return jsonify(result)
+            response_data = {
+                "result": result["result"],
+                "foul_type": result["foul_type"]
+            }
+            return jsonify(response_data)
+
 
     return render_template('index.html')
 

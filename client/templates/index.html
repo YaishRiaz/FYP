@@ -175,20 +175,23 @@
                 const resultText = isFoul ? "The video is not a foul." : "The video is a Foul.";
                 const resultColor = isFoul ? 'green' : 'red';
                 resultDiv.innerHTML = `<span style="color: ${resultColor};">${resultText}</span>`;
-                sessionStorage.setItem('foulDetected', !isFoul);
-                sessionStorage.setItem('foulType', isFoul ? 'No Foul' : 'Low Blow');
-                sessionStorage.setItem('videoFile', URL.createObjectURL(videoFileInput.files[0]));
-                sessionStorage.setItem('resultText', resultText);
-                sessionStorage.setItem('resultColor', resultColor);
-                sessionStorage.setItem('checkStatsDisplay', 'inline-block');
+                sessionStorage.setItem('videoAnalysisData', JSON.stringify({
+                    foulDetected: !isFoul,
+                    foulType: isFoul ? 'No Foul' : 'Low Blow',
+                    videoFile: URL.createObjectURL(videoFileInput.files[0]),
+                    resultText: resultText,
+                    resultColor: resultColor,
+                    checkStatsDisplay: 'inline-block',
+                }));
                 checkStatsBtn.style.display = 'inline-block';
             } else {
                 resultDiv.innerHTML = `Error: ${response.statusText}`;
-                sessionStorage.removeItem('checkStatsDisplay');
+                sessionStorage.removeItem('videoAnalysisData');
                 checkStatsBtn.style.display = 'none';
             }
             resultDiv.style.display = 'block';
         });
+
 
 
         function toggleTheme() {
@@ -199,28 +202,30 @@
         document.getElementById('themeSwitch').addEventListener('change', toggleTheme);
 
         function loadPageState() {
-            const videoFile = sessionStorage.getItem('videoFile');
-            const resultText = sessionStorage.getItem('resultText');
-            const resultColor = sessionStorage.getItem('resultColor');
-            const checkStatsDisplay = sessionStorage.getItem('checkStatsDisplay');
+            const videoAnalysisData = JSON.parse(sessionStorage.getItem('videoAnalysisData'));
 
-            if (videoFile) {
-                const videoPreview = document.getElementById('videoPreview');
-                videoPreview.src = videoFile;
-                videoPreview.load();
-            }
+            if (videoAnalysisData) {
+                const { videoFile, resultText, resultColor, checkStatsDisplay } = videoAnalysisData;
 
-            if (resultText && resultColor) {
-                const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = `<span style="color: ${resultColor};">${resultText}</span>`;
-                resultDiv.style.display = 'block';
-            }
+                if (videoFile) {
+                    const videoPreview = document.getElementById('videoPreview');
+                    videoPreview.src = videoFile;
+                    videoPreview.load();
+                }
 
-            if (checkStatsDisplay) {
-                const checkStatsBtn = document.getElementById('checkStats');
-                checkStatsBtn.style.display = checkStatsDisplay;
+                if (resultText && resultColor) {
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = `<span style="color: ${resultColor};">${resultText}</span>`;
+                    resultDiv.style.display = 'block';
+                }
+
+                if (checkStatsDisplay) {
+                    const checkStatsBtn = document.getElementById('checkStats');
+                    checkStatsBtn.style.display = checkStatsDisplay;
+                }
             }
         }
+
 
         window.onload = function () {
             loadPageState();
